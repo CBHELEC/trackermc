@@ -1,0 +1,68 @@
+database:
+  type: SQLITE
+  file: data.db
+
+gps:
+  update-ticks: 10           # how often to update compass/action bar
+  sound:
+    enabled: true
+    name: BLOCK_NOTE_BLOCK_PLING
+    pitch-near: 1.6
+    pitch-far: 0.8
+  actionbar: true
+  claim-radius: 3.0
+  show-bearing: true
+
+loot:
+  default-pack: starter
+  packs:
+    starter:
+      display: "&aStarter Pack"
+      icon: CHEST
+      entries:
+        - material: BREAD
+          amount: 4
+          weight: 6
+        - material: IRON_INGOT
+          amount: 3
+          weight: 3
+        - material: EMERALD
+          amount: 1
+          weight: 1
+    adventurer:
+      display: "&bAdventurer Pack"
+      icon: COMPASS
+      entries:
+        - material: COOKED_BEEF
+          amount: 6
+          weight: 4
+        - material: GOLDEN_APPLE
+          amount: 1
+          weight: 1
+        - material: ARROW
+          amount: 16
+          weight: 3
+    rare:
+      display: "&dRare Pack"
+      icon: ENDER_CHEST
+      entries:
+        - material: DIAMOND
+          amount: 2
+          weight: 2
+        - material: ENCHANTED_GOLDEN_APPLE
+          amount: 1
+          weight: 1
+        - material: NETHERITE_SCRAP
+          amount: 1
+          weight: 1
+
+messages:
+  prefix: "&6[Geo]&r "
+  cache-created: "&aCache &e%name% &acreated at &e%x% %y% %z%&a."
+  cache-removed: "&cCache &e%id% &cremoved."
+  cache-claimed: "&aYou found cache &e%name%&a! Loot delivered."
+  target-set: "&aGPS set to cache &e%name%&a."
+  not-found: "&cCache not found."
+  no-target: "&cNo GPS target. Use &e/geocache target <id>&c."
+  list-header: "&6Caches (%count%):"
+  list-line: "&7- &e%id%&7: &f%name% &7(&b%dist%m&7 away)"
