@@ -65,4 +65,24 @@ public class CacheManager {
         plugin.data().recordFind(c.getId(), p.getUniqueId());
         return true;
     }
+
+    public void addCache(Cache cache) {
+    caches.put(cache.getId(), cache);
+    data.saveCache(cache);
+    }
+
+    public void deleteCache(Cache cache) {
+        caches.remove(cache.getId());
+        data.deleteCache(cache.getId());
+    }
+
+    public Cache getCacheByOwnerName(String ownerName) {
+        for (Cache c : caches.values()) {
+            if (c.getOwner() != null && ownerName.equalsIgnoreCase(c.getOwner().toString())) { // or implement getOwnerName() in Cache
+                return c;
+            }
+        }
+        return null;
+    }
+
 }

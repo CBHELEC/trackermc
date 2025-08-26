@@ -1,6 +1,7 @@
 package com.plugincraft.geocaching;
 
 import com.plugincraft.geocaching.command.GeoCommand;
+import com.plugincraft.geocaching.service.GPSManager;
 import com.plugincraft.geocaching.data.DataStore;
 import com.plugincraft.geocaching.data.SQLite;
 import com.plugincraft.geocaching.service.CacheManager;
@@ -11,7 +12,6 @@ import com.plugincraft.geocaching.ui.CacheGUI;
 import com.plugincraft.geocaching.ui.PackGUI;
 import com.plugincraft.geocaching.ui.TrophyGUI;
 import com.plugincraft.geocaching.util.Chat;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,8 +23,9 @@ public class GeoCachingPlugin extends JavaPlugin {
     private LootManager loot;
     private GearManager gear;
     private TrackerService tracker;
+    private GPSManager gpsManager;
+    private CacheGUI cacheGUI;
 
-    // NamespacedKeys
     private NamespacedKey keyGPS;
     private NamespacedKey keyCacheId;
     private NamespacedKey keyTrophy;
@@ -37,12 +38,10 @@ public class GeoCachingPlugin extends JavaPlugin {
         saveDefaultConfig();
         Chat.init(this);
 
-        // Keys
         keyGPS = new NamespacedKey(this, "gps");
         keyCacheId = new NamespacedKey(this, "cache-id");
         keyTrophy = new NamespacedKey(this, "trophy");
 
-        // Data
         data = new SQLite(this);
         data.init();
 
@@ -56,15 +55,15 @@ public class GeoCachingPlugin extends JavaPlugin {
         tracker = new TrackerService(this, caches, gear);
         tracker.start();
 
-        // GUIs register (listeners are inside GUI classes)
-        new CacheGUI(this);
+        gpsManager = new GPSManager();   // your GPSManager has a no-arg constructor
+        cacheGUI = new CacheGUI(this);   // stored for reuse
+
         new PackGUI(this, loot, gear);
         new TrophyGUI(this);
 
-        // Command
-        GeoCommand cmd = new GeoCommand(this, caches, loot, gear);
+        GeoCommand cmd = new GeoCommand(caches, gpsManager, cacheGUI);
         getCommand("geocache").setExecutor(cmd);
-        getCommand("geocache").setTabCompleter(cmd);
+        // remove setTabCompleter for now since GeoCommand isn't a TabCompleter
 
         getLogger().info("PluginCraft Geocaching enabled with " + caches.count() + " caches.");
     }
@@ -76,11 +75,7 @@ public class GeoCachingPlugin extends JavaPlugin {
         if (data != null) data.close();
     }
 
-    // Getter for tracker
-    public TrackerService tracker() {
-        return tracker;
-    }
-
+    public TrackerService tracker() { return tracker; }
     public DataStore data() { return data; }
     public CacheManager caches() { return caches; }
     public LootManager loot() { return loot; }

@@ -33,4 +33,29 @@ public class Cache {
     public boolean isActive() { return active; }
     public void setActive(boolean a) { active = a; }
     public Set<UUID> getFoundBy() { return foundBy; }
+
+    private UUID owner;
+    private ContainerType container;
+
+    public UUID getOwner() {
+        return owner != null ? owner : creator; // fallback to creator if needed
+    }
+
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
+    public ContainerType getContainer() {
+        return container;
+    }
+
+    public void setContainer(ContainerType container) {
+        this.container = container;
+    }
+
+    // Optional no-arg constructor for CacheGUI
+    public Cache() {
+        this.id = UUID.randomUUID().toString();
+    }
+
 }
